@@ -1,10 +1,10 @@
 {site1}
-host=192.168.1.1
+host=www.gov.cn
 last=5
-time=3
+times=3
 protocol=http
 {site2}
-host=192.168.1.50
+host=www.baidu.com
 last=4
-time=3
+times=3
 protocol=http
