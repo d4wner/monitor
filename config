@@ -1,0 +1,10 @@
+{site1}
+host=192.168.1.1
+last=5
+time=3
+protocol=http
+{site2}
+host=192.168.1.50
+last=4
+time=3
+protocol=http
