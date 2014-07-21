@@ -70,7 +70,7 @@ def http_detect(host,last):
 def detect_all(host,last,times,protocol):
 	if protocol == "http":
 		#print host+"==detect"
-		print 'Starting monitor on host',host
+		print 'Starting http_monitor on host',host
 		for i in range(times):
 			http_detect(host,last)
 
