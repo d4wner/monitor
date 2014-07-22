@@ -4,6 +4,8 @@ import urllib
 import time
 from threading import Thread
 from Queue import Queue
+import socket
+
 site_info=[]
 protocol=""
 
@@ -54,7 +56,7 @@ class ThreadPool:
 			thread.join()
 			if thread.isAlive() and not self.taskQueue.empty():
 				self.threads.append(thread)
-		print host,' monitoring has completed!'
+		print 'Monitoring has completed!'
 
 #######################################################
 
@@ -67,12 +69,31 @@ def http_detect(host,last):
 	time.sleep(int(last))
 	
 
+def tcp_detect(host,last,port):
+	sk=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sk=sk.settimeout(2000)
+	try:
+		sk.connect((host,port))
+	except:
+		print('Server port is not connected!')
+	sk.close()
+	time.sleep(int(last))
+
+
+
 def detect_all(host,last,times,protocol):
 	if protocol == "http":
 		#print host+"==detect"
 		print 'Starting http_monitor on host',host
-		for i in range(times):
+		for i in range(int(times)):
 			http_detect(host,last)
+	elif protocol == "tcp":
+		print 'Starting tcp_monitor on host',host
+		for i in range(int(times)):
+			host=host.split(":")[0]
+			port=host.split(":")[1]
+			tcp_detect(host,last,port)
+			
 
 if __name__ == "__main__":
 	t=time.time()
@@ -91,7 +112,7 @@ if __name__ == "__main__":
 		elif "protocol" in line:
 			protocol=line.split("=")[1]
 		if  protocol != "":
-			site_info.append(host+":"last+":"+times+":"+protocol)
+			site_info.append(host+":"+last+":"+times+":"+protocol)
 			host = ""
 			last = ""
 			times = ""
