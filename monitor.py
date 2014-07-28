@@ -5,6 +5,8 @@ import time
 from threading import Thread
 from Queue import Queue
 import socket
+from  icmp_ping import verbose_ping
+from udp_detect import checker_udp
 
 site_info=[]
 protocol=""
@@ -70,30 +72,65 @@ def http_detect(host,last):
 	
 
 def tcp_detect(host,last,port):
-	sk=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sk=sk.settimeout(2000)
+	sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sk.settimeout(2)
+	#print "host:",host
+	#print "port:",port
 	try:
 		sk.connect((host,port))
-	except:
-		print('Server port is not connected!')
+	except Exception,e:
+		print e
+		print 'Server '+host+': port is not connected!'
 	sk.close()
 	time.sleep(int(last))
 
+def udp_detect(host,last,port):
+	if not checker_udp(host,port):
+		print 'Server'+host+': port is not connected!'
+	time.sleep(int(last))
 
+
+def icmp_detect(host,last):
+	#x=verbose_ping(host)
+	#print x
+	if not verbose_ping(host):
+		print "Can't contact the server "+host
+	time.sleep(int(last))
 
 def detect_all(host,last,times,protocol):
+	#print('host:'+host)
+	#print('last:'+last)
+	#print('times:'+times)
+	#print('protocol:'+protocol)
 	if protocol == "http":
 		#print host+"==detect"
 		print 'Starting http_monitor on host',host
+		http_t=time.time()
 		for i in range(int(times)):
 			http_detect(host,last)
+		print 'used time:%f' % (time.time()-http_t) ,host
 	elif protocol == "tcp":
 		print 'Starting tcp_monitor on host',host
+		tcp_t=time.time()
 		for i in range(int(times)):
-			host=host.split(":")[0]
-			port=host.split(":")[1]
-			tcp_detect(host,last,port)
-			
+			r_host=host.split("#")[0]
+			port=int(host.split("#")[1])
+			tcp_detect(r_host,last,port)
+		print 'used time:%f' % (time.time()-tcp_t) ,host
+	elif protocol == "udp":
+		print 'Starting udp_monitor on host',host
+		udp_t=time.time()
+		for i in range(int(times)):
+			r_host=host.split("#")[0]
+			port=int(host.split("#")[1])
+			udp_detect(r_host,last,port)
+		print 'used time:%f' % (time.time()-udp_t) ,host
+	elif protocol == "icmp":
+		print 'Starting icmp_monitor on host',host
+		icmp_t=time.time()
+		for i in range(int(times)):
+			icmp_detect(host,last)
+		print 'used time:%f' % (time.time()-icmp_t),host 
 
 if __name__ == "__main__":
 	t=time.time()
@@ -118,6 +155,6 @@ if __name__ == "__main__":
 			times = ""
 			protocol = ""
 	tp=ThreadPool(site_info)
-	tp.waitfor_complete()		
-	print 'used time:%f' % (time.time()-t) 
+	tp.waitfor_complete()
+	print 'Used time:%f' % (time.time()-t)
 
