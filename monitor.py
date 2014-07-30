@@ -2,6 +2,7 @@
 #coding=utf-8
 import urllib
 import time
+import threading
 from threading import Thread
 from Queue import Queue
 import socket
@@ -26,26 +27,22 @@ class thread_watch(threading.Thread):
 	def stop(self):
 		print "stopping ..."
 		self.isRunning = False
-
+		#pid = str(connection.recv(1024))
 	def run(self):
+		print 'Client starting...'
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-		sock.bind(('localhost', 8888))
-		sock.listen(5)
+		sock.connect(('localhost', 8888))
 		pid=str(os.getpid())
-		connection,address = sock.accept()
 		while(self.isRunning):
 			try:
-				connection.settimeout(5)
-				buf = connection.recv(1024)
-				if buf != '':
-					connection.send(pid)
-				except socket.timeout:
-					print 'time out'
-					connection.close()
-		connection.send("shutdown")
-		connection.close()
-		time.sleep(2)
+				sock.send(pid)
+				sock.settimeout(5)
+				buf = sock.recv(1024)
+			except Exception,e:
+				print e
+				pass
+		sock.sendall("shutdown")
+		sock.close()
 
 ########################################################
 class Worker(Thread):
@@ -160,25 +157,6 @@ def detect_all(host,protocol):
 			icmp_detect(host)
 		print 'used time:%f' % (time.time()-icmp_t),host 
 
-##########Response for reset script##Moved to thread_watch######
-#def watch_dog():
-#	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#	sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-#	sock.bind(('localhost', 8888))
-#	sock.listen(5)
-#	pid=str(os.getpid())
-#	connection,address = sock.accept()
-#	while True:
-#		try:
-#			connection.settimeout(5)
-#			buf = connection.recv(1024)
-#			if buf != '':
-#				connection.send(pid)
-#			except socket.timeout:
-#				print 'time out'
-#				connection.close()
-#	connection.close()
-##############################################################
 
 if __name__ == "__main__":
 	r=open('warn_result.log','w+')
