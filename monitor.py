@@ -25,7 +25,7 @@ class thread_watch(threading.Thread):
 		pass
 
 	def stop(self):
-		print "stopping ..."
+		print "Client stopping ..."
 		self.isRunning = False
 		#pid = str(connection.recv(1024))
 	def run(self):

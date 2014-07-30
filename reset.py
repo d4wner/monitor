@@ -4,7 +4,8 @@ import os
 import socket
 import threading
 
-def reset(pid):	
+
+def reset(pid):
 	try:
 		if os.popen('ps -ef|grep '+pid).read(): 
 			os.system('kill -9 '+pid)
@@ -16,6 +17,7 @@ def reset(pid):
 	except Exception,e:
 		print e
 		exit(0)
+#如果主程序挂掉，在后台重启主程序，继续运行
 
 class thread_watch(threading.Thread):
 	def __init__(self,connection):
