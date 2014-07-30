@@ -1,4 +1,13 @@
 ===========================
+Usage:
+Run by root user.
+
+python reset.py
+python monitor.py
+
+reset.py==> reset file for monitor.py 
+
+===========================
 config文件配置
 
 {site1}===>
@@ -20,7 +29,7 @@ protocol====>
 ===============================
 
 使用方法：
-root权限，python2.7环境
+root权限, not just "sudo" to change，python2.7环境
 直接运行monitor.py即可
 
 ===============================
@@ -29,6 +38,28 @@ Update time: 07/29
 主程序在运行结束会自动断掉单线程的心跳轮询，并向客户端发送退出命令。
 
 PS:reset.py实现的不是断点续航，而是重新开始任务
+
+===============================
+Update time: 07/30
+
+Modify the structure of the script,solve some bugs.
+
+monitor.py==>socket client
+reset.py==>socket server
+
+Add extra threadline to listen on the port. 
+Solve the problem of "port in use".
+===============================
+
+
+
+
+
+
+
+
+
+
 
 
 
