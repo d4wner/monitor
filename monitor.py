@@ -17,7 +17,7 @@ global r,last,times,ISOTIMEFORMAT
 ISOTIMEFORMAT='%Y-%m-%d-%X'
 last=3
 times=5
-###################Single thread_wathch#################
+###################Single thread_watch#################
 class thread_watch(threading.Thread):
 	def __init__(self):
 		self.isRunning = True
@@ -60,7 +60,7 @@ class Worker(Thread):
 			except:
 				break
 
-#######################################################
+###############Threading Pool#################
 class ThreadPool:
 	def __init__(self,site_info):
 		self.threads=[]
@@ -91,7 +91,7 @@ class ThreadPool:
 				self.threads.append(thread)
 		print 'Monitoring has completed!'
 
-####################Threading Pool#####################
+#########################Detect Models######################
 
 def http_detect(host):
 	resp=urllib.urlopen("http://"+host)
@@ -126,7 +126,7 @@ def icmp_detect(host):
 		r.writelines("ICMP_lost "+host+" "+time.strftime(ISOTIMEFORMAT, time.localtime())+"\n")
 	time.sleep(int(last))
 
-##########################Detect Models###################################
+#############################################################
 def detect_all(host,protocol):
 	if protocol == "http":
 		print 'Starting http_monitor on host',host
