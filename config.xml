@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<minute>5</minute>
+	<times>2</times>
+	<hostlist>
+		<item>
+			<id>48</id>
+			<host>www.test.com</host>
+			<protocol>http</protocol>
+			<port>0</port>
+		</item>
+		<item>
+			<id>49</id>
+			<host>www.test.1com</host>
+			<protocol>tcp</protocol>
+			<port>0</port>
+		</item>
+		<item>
+			<id>50</id>
+			<host>www.baidu.com</host>
+			<protocol>http</protocol>
+			<port>80</port>
+		</item>
+	</hostlist>
+</config>
+
