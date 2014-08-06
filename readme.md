@@ -50,7 +50,18 @@ reset.py==>socket server
 Add extra threadline to listen on the port. 
 Solve the problem of "port in use".
 ===============================
+update time: 08/05
 
+monitor.py==>monitor-heart.py
+
+取消心跳包（reset.py）检测脚本存活
+增加服务器端接收扫描结果文件：server.py,附加口令认证
+使用监控前对原扫描结果进行预获取
+
+
+
+
+ 
 
 
 
